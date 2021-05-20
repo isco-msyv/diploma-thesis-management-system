@@ -108,7 +108,21 @@
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="lines">
+            @if(auth()->user()->type === UserType::TEACHER)
+                <li class="{{ (Route::is('teacher.projects.index') || Route::is('teacher.projects.create') || Route::is('teacher.projects.edit')) ? 'active' : null }} nav-item">
+                    <a href="{{ route('teacher.projects.index') }}">
+                        <i class="menu-livicon livicon-evo-holder" data-icon="notebook"></i>
+                        <span class="menu-title">Projects</span>
+                    </a>
+                </li>
 
+                <li class="{{ (Route::is('teacher.tasks.index') || Route::is('teacher.tasks.create') || Route::is('teacher.tasks.edit')) ? 'active' : null }} nav-item">
+                    <a href="{{ route('teacher.tasks.index') }}">
+                        <i class="menu-livicon livicon-evo-holder" data-icon="notebook"></i>
+                        <span class="menu-title">Tasks</span>
+                    </a>
+                </li>
+            @endif
         </ul>
     </div>
 </div>

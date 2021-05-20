@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Teacher\ProjectController as TeacherProjectController;
+use App\Http\Controllers\Teacher\TaskController as TeacherTaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,4 +27,26 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::resource('projects', TeacherProjectController::class)
+        ->except(['show'])
+        ->names([
+            'index' => 'teacher.projects.index',
+            'create' => 'teacher.projects.create',
+            'store' => 'teacher.projects.store',
+            'edit' => 'teacher.projects.edit',
+            'update' => 'teacher.projects.update',
+            'destroy' => 'teacher.projects.delete',
+        ]);
+
+    Route::resource('tasks', TeacherTaskController::class)
+        ->except(['show'])
+        ->names([
+            'index' => 'teacher.tasks.index',
+            'create' => 'teacher.tasks.create',
+            'store' => 'teacher.tasks.store',
+            'edit' => 'teacher.tasks.edit',
+            'update' => 'teacher.tasks.update',
+            'destroy' => 'teacher.tasks.delete',
+        ]);
 });
