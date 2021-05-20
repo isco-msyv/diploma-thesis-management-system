@@ -1,0 +1,42 @@
+html body.bg-full-screen-image {
+    background: url(../../assets/images/auth-bg.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+select.form-control:not([multiple=multiple]) {
+    background-image: url(../../assets/images/arrow-down.png);
+    background-position: calc(100% - 12px) 13px, calc(100% - 20px) 13px, 100% 0;
+    background-size: 12px 12px, 10px 10px;
+    background-repeat: no-repeat;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 1.5rem
+}
+
+.upload-preview .upload-preview-wrap,
+.upload-preview .upload-result {
+    display: none;
+}
+
+.upload-preview .ready .upload-preview-wrap {
+    display: block;
+}
+
+.upload-preview .ready .upload-result {
+    display: inline-block;
+}
+
+.list-countries {
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #5A8DEE;
+    border-radius: 5px;
+}
+
+body.dark-layout .table tbody td a i, body.dark-layout .table tbody th a i {
+    color: white !important;
+}
+
+body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation li.has-sub > a:not(.mm-next):after {
+    content: '\ea48';
+}
