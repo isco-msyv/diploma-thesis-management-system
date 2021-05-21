@@ -229,6 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'UserType' => App\Helpers\UserType::class,
+        'ProjectRequestStatus' => App\Helpers\ProjectRequestStatus::class,
     ],
 
 ];

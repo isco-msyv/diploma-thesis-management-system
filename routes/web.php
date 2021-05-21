@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Teacher\ProjectController as TeacherProjectController;
+use App\Http\Controllers\Teacher\ProjectRequestController as TeacherProjectRequestController;
 use App\Http\Controllers\Teacher\TaskController as TeacherTaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +51,9 @@ Route::middleware(['auth'])->group(function () {
                 'update' => 'teacher.tasks.update',
                 'destroy' => 'teacher.tasks.delete',
             ]);
+
+        Route::get('/project-requests', [TeacherProjectRequestController::class, 'index'])->name('teacher.projectRequests.index');
+        Route::put('/project-requests/{projectRequest}', [TeacherProjectRequestController::class, 'update'])->name('teacher.projectRequests.update');
     });
 
 });
