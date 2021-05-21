@@ -48,6 +48,8 @@ class ProjectController extends Controller
             return redirect()->route('teacher.projects.index');
         }
 
+        $project->load(['tasks']);
+
         return view('teacher.projects.edit', ['project' => $project]);
     }
 

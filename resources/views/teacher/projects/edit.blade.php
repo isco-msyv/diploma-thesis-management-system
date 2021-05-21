@@ -93,6 +93,30 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Tasks</h4>
+                            <a class="btn btn-primary" href="{{ route('teacher.tasks.create') }}">Add Task</a>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                <ul>
+                                    @foreach($project->tasks as $task)
+                                        <li>
+                                            <a href="{{ route('teacher.tasks.edit', $task) }}">
+                                                {{ $task->description }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
