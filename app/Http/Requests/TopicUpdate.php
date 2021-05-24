@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ProjectUpdate extends FormRequest
+class TopicUpdate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +17,9 @@ class ProjectUpdate extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check() && auth()->user()->type === UserType::TEACHER && $this->project->teacher_id === auth()->user()->id;
+        $topic = Project::findOrFail($this->topic);
+
+        return auth()->check() && auth()->user()->type === UserType::TEACHER && $topic->teacher_id === auth()->user()->id;
     }
 
     /**
@@ -27,9 +29,12 @@ class ProjectUpdate extends FormRequest
      */
     public function rules()
     {
+        $students = User::where('type', '=', UserType::STUDENT)->doesntHave('studentProject')->get()->pluck('id')->toArray();
+
         return [
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string']
+            'description' => ['nullable', 'string'],
+            'student_id' => ['nullable', Rule::in($students)]
         ];
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Helpers\ProjectRequestStatus;
+use App\Helpers\ProjectStatus;
 use App\Helpers\UserType;
 use App\Http\Controllers\Controller;
+use App\Models\Project;
 use App\Models\ProjectRequest;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -43,6 +45,16 @@ class ProjectRequestController extends Controller
         $status = $request->get('status');
 
         $projectRequest->update(['status' => $status]);
+
+        switch ($status) {
+            case ProjectRequestStatus::PENDING:
+            case ProjectRequestStatus::REJECTED:
+                $projectRequest->project()->update(['student_id' => null, 'status' => ProjectStatus::NOT_ASSIGNED]);
+                break;
+            case ProjectRequestStatus::ACCEPTED:
+                $projectRequest->project()->update(['student_id' => $projectRequest->student_id, 'status' => ProjectStatus::ASSIGNED]);
+                break;
+        }
 
         return redirect()->route('teacher.projectRequests.index')->with(['toast-type' => 'success', 'message' => 'Project Request updated!']);
     }

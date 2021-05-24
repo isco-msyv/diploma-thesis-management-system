@@ -19,7 +19,10 @@ class Project extends Model
     protected $fillable = [
         'title',
         'description',
-        'teacher_id'
+        'teacher_id',
+        'student_id',
+        'status',
+        'artefact',
     ];
 
     /**
@@ -28,6 +31,14 @@ class Project extends Model
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(User::class, 'teacher_id', 'id');
+    }
+
+    /**
+     * Get the student that owns the project.
+     */
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'student_id', 'id');
     }
 
     /**

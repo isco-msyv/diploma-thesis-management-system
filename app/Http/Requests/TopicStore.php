@@ -3,9 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Helpers\UserType;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class ProjectStore extends FormRequest
+class TopicStore extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +26,12 @@ class ProjectStore extends FormRequest
      */
     public function rules()
     {
+        $students = User::where('type', '=', UserType::STUDENT)->doesntHave('studentProject')->get()->pluck('id')->toArray();
+
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'student_id' => ['nullable', Rule::in($students)]
         ];
     }
 }

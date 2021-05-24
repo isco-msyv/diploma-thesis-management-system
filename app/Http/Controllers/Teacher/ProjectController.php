@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProjectStore;
 use App\Http\Requests\ProjectUpdate;
 use App\Models\Project;
 use Exception;
@@ -13,7 +12,8 @@ class ProjectController extends Controller
 {
     public function index(Request $request)
     {
-        $projects = Project::where('teacher_id', '=', auth()->user()->id)
+        $projects = Project::with('student')->where('teacher_id', '=', auth()->user()->id)
+            ->has('student')
             ->when($request->query('search'), function ($query) use ($request) {
                 $search = $request->query('search');
                 $query->where(function ($query) use ($search) {
@@ -26,29 +26,13 @@ class ProjectController extends Controller
         return view('teacher.projects.index', ['projects' => $projects]);
     }
 
-    public function create()
-    {
-        return view('teacher.projects.create');
-    }
-
-    public function store(ProjectStore $request)
-    {
-        $validated = $request->validated();
-
-        $validated['teacher_id'] = auth()->user()->id;
-
-        Project::create($validated);
-
-        return redirect()->route('teacher.projects.index')->with(['toast-type' => 'success', 'message' => 'Project created!']);
-    }
-
     public function edit(Project $project)
     {
         if ($project->teacher_id != auth()->user()->id) {
             return redirect()->route('teacher.projects.index');
         }
 
-        $project->load(['tasks']);
+        $project->load(['tasks', 'student']);
 
         return view('teacher.projects.edit', ['project' => $project]);
     }

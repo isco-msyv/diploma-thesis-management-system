@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Teacher\ProjectController as TeacherProjectController;
 use App\Http\Controllers\Teacher\ProjectRequestController as TeacherProjectRequestController;
 use App\Http\Controllers\Teacher\TaskController as TeacherTaskController;
+use App\Http\Controllers\Teacher\TopicController as TeacherTopicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,25 +31,30 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::group(['prefix' => 'teacher'], function () {
-        Route::resource('projects', TeacherProjectController::class)
+        Route::resource('topics', TeacherTopicController::class)
             ->except(['show'])
             ->names([
+                'index' => 'teacher.topics.index',
+                'create' => 'teacher.topics.create',
+                'store' => 'teacher.topics.store',
+                'edit' => 'teacher.topics.edit',
+                'update' => 'teacher.topics.update',
+                'destroy' => 'teacher.topics.delete',
+            ]);
+
+        Route::resource('projects', TeacherProjectController::class)
+            ->except(['show', 'create', 'store'])
+            ->names([
                 'index' => 'teacher.projects.index',
-                'create' => 'teacher.projects.create',
-                'store' => 'teacher.projects.store',
                 'edit' => 'teacher.projects.edit',
                 'update' => 'teacher.projects.update',
                 'destroy' => 'teacher.projects.delete',
             ]);
 
         Route::resource('tasks', TeacherTaskController::class)
-            ->except(['show'])
+            ->except(['index', 'show', 'create', 'edit', 'update'])
             ->names([
-                'index' => 'teacher.tasks.index',
-                'create' => 'teacher.tasks.create',
                 'store' => 'teacher.tasks.store',
-                'edit' => 'teacher.tasks.edit',
-                'update' => 'teacher.tasks.update',
                 'destroy' => 'teacher.tasks.delete',
             ]);
 

@@ -1,10 +1,14 @@
 @extends('layout')
 
-@section('title', 'Projects | Edit')
+@section('title', 'Topics | Edit')
 
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('frest/app-assets/css/plugins/forms/validation/form-validation.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('frest/app-assets/vendors/css/extensions/sweetalert2.min.css') }}">
+@endsection
+
+@section('vendor-css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('frest/app-assets/vendors/css/forms/select/select2.min.css') }}">
 @endsection
 
 @section('content')
@@ -19,7 +23,7 @@
                         </div>
                         <div class="card-content">
                             <div class="card-body">
-                                <form class="form form-horizontal" method="POST" action="{{ route('teacher.projects.update', $project) }}" novalidate>
+                                <form class="form form-horizontal" method="POST" action="{{ route('teacher.topics.update', $topic) }}" novalidate>
                                     @method('PUT')
                                     @csrf
                                     <div class="form-body">
@@ -37,7 +41,7 @@
                                                            type="text"
                                                            name="title"
                                                            placeholder="title"
-                                                           value="{{ old('title', $project->title) }}"
+                                                           value="{{ old('title', $topic->title) }}"
                                                            maxlength="255"
                                                            data-validation-maxlength-message="Max 255 characters"
                                                            required>
@@ -61,7 +65,7 @@
                                                               class="form-control @error('description') is-invalid @enderror"
                                                               type="text"
                                                               name="description"
-                                                              placeholder="description">{{ old('description', $project->description) }}</textarea>
+                                                              placeholder="description">{{ old('description', $topic->description) }}</textarea>
                                                     @error('description')
                                                     <div class="invalid-feedback">
                                                         <i class="bx bx-radio-circle"></i>
@@ -74,33 +78,20 @@
                                             <!-- Student -->
                                             <div class="col-md-4">
                                                 <label for="item-student">STUDENT</label>
+                                                <small class="text-muted">optional</small>
                                             </div>
                                             <div class="col-md-8 form-group">
-                                                <div class="controls">
-                                                    <input id="item-student"
-                                                           class="form-control"
-                                                           type="text"
-                                                           name="student"
-                                                           placeholder="student"
-                                                           value="{{ $project->student->full_name }}"
-                                                           readonly>
+                                                <select id="item-student" class="select2 form-control @error('student_id') is-invalid @enderror" name="student_id" required>
+                                                    @foreach($students as $student)
+                                                        <option value="{{ $student->id }}">{{ $student->full_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('student_id')
+                                                <div class="invalid-feedback">
+                                                    <i class="bx bx-radio-circle"></i>
+                                                    {{ $message }}
                                                 </div>
-                                            </div>
-
-                                            <!-- Status -->
-                                            <div class="col-md-4">
-                                                <label for="item-status">STATUS</label>
-                                            </div>
-                                            <div class="col-md-8 form-group">
-                                                <div class="controls">
-                                                    <input id="item-status"
-                                                           class="form-control"
-                                                           type="text"
-                                                           name="status"
-                                                           placeholder="status"
-                                                           value="{{ $project->status }}"
-                                                           readonly>
-                                                </div>
+                                                @enderror
                                             </div>
 
                                             <!-- Buttons -->
@@ -116,7 +107,7 @@
                                     </div>
                                 </form>
 
-                                <form id="form-delete" action="{{ route('teacher.projects.delete', $project) }}" method="POST">
+                                <form id="form-delete" action="{{ route('teacher.topics.delete', $topic) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                 </form>
@@ -138,7 +129,7 @@
                                     @csrf
                                     <div class="form-body">
                                         <div class="row">
-                                            <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                            <input type="hidden" name="project_id" value="{{ $topic->id }}">
 
                                             <!-- Description -->
                                             <div class="col-md-4">
@@ -183,7 +174,7 @@
                             <h4 class="card-title">Tasks</h4>
                         </div>
                         <div class="card-content">
-                            @if($project->tasks->count() > 0)
+                            @if($topic->tasks->count() > 0)
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-hover">
@@ -196,7 +187,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($project->tasks as $task)
+                                            @foreach($topic->tasks as $task)
                                                 <tr>
                                                     <td>{{ $task->id }}</td>
                                                     <td>{{ $task->description }}</td>
@@ -247,6 +238,7 @@
 @endsection
 
 @section('page-vendor-js')
+    <script type="text/javascript" src="{{ asset('frest/app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('frest/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
     <script type="text/javascript" src="{{ asset('frest/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('frest/app-assets/vendors/js/extensions/polyfill.min.js') }}"></script>
@@ -255,6 +247,17 @@
 @section('page-js')
     <script type="text/javascript">
         $(document).ready(function () {
+
+            let data = '{{ old('student_id') }}';
+
+            let select = $("#item-student");
+            select.val(data);
+            select.trigger('change');
+            select.select2({
+                placeholder: "choose a student",
+                allowClear: true,
+                closeOnSelect: true
+            });
 
             $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 
@@ -277,26 +280,7 @@
                 })
             });
 
-            $('.delete-task').on('click', function () {
-                let button = $(this);
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Delete!',
-                    confirmButtonClass: 'btn btn-danger',
-                    cancelButtonClass: 'btn btn-primary ml-1',
-                    buttonsStyling: false,
-                }).then(function (result) {
-                    if (result.value) {
-                        button.closest('td').find('form').submit();
-                    }
-                })
-            });
+            $('.select2-container').css('width', '100%');
 
         });
     </script>
