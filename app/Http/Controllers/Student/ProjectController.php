@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use phpDocumentor\Reflection\Project;
 
 class ProjectController extends Controller
 {
@@ -39,7 +38,7 @@ class ProjectController extends Controller
 
         foreach ($tasks as $task) {
             if (!$task->status) {
-                return back()->with(['toast-type' => 'error', 'message' => 'Finish all the tasks!']);
+                return back()->with(['toast-type' => 'error', 'message' => 'Complete all the tasks!']);
             }
         }
 

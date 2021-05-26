@@ -102,7 +102,7 @@
                                             </div>
                                             <div class="col-md-8 form-group">
                                                 <div class="row">
-                                                    <div class="col-md-{{ $user->studentProject->status === ProjectStatus::IN_REVIEW || $user->studentProject->status === ProjectStatus::COMPLETED ? '9' : '12' }} form-group">
+                                                    <div class="col-md-{{ $user->studentProjectRequest === null && ($user->studentProject->status === ProjectStatus::IN_REVIEW || $user->studentProject->status === ProjectStatus::COMPLETED) ? '9' : '12' }} form-group">
                                                         <input id="item-artefact"
                                                                class="form-control  @error('artefact') is-invalid @enderror"
                                                                type="file"
@@ -116,7 +116,7 @@
                                                         </div>
                                                         @enderror
                                                     </div>
-                                                    @if($user->studentProject->status === ProjectStatus::IN_REVIEW || $user->studentProject->status === ProjectStatus::COMPLETED)
+                                                    @if($user->studentProjectRequest === null && ($user->studentProject->status === ProjectStatus::IN_REVIEW || $user->studentProject->status === ProjectStatus::COMPLETED))
                                                         <div class="col-md-3">
                                                             <div class="d-flex justify-content-end">
                                                                 <a class="btn btn-primary shadow"

@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\CheckStudentHasNoProjectOrProjectRequest;
 use App\Http\Middleware\CheckStudentHasProjectOrProjectRequest;
 use App\Http\Middleware\CheckUserTypeStudent;
+use App\Http\Middleware\CheckUserTypeTeacher;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -67,6 +68,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'checkUserTypeStudent'=> CheckUserTypeStudent::class,
+        'checkUserTypeTeacher'=> CheckUserTypeTeacher::class,
         'checkStudentHasNoProjectOrProjectRequest'=> CheckStudentHasNoProjectOrProjectRequest::class,
         'checkStudentHasProjectOrProjectRequest'=> CheckStudentHasProjectOrProjectRequest::class,
     ];

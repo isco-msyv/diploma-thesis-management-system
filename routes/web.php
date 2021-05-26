@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/', [ProfileController::class, 'update'])->name('profile.update');
 
-    Route::group(['prefix' => 'teacher'], function () {
+    Route::group(['prefix' => 'teacher', 'middleware' => ['checkUserTypeTeacher']], function () {
         Route::resource('topics', TeacherTopicController::class)
             ->except(['show'])
             ->names([
@@ -53,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
                 'update' => 'teacher.projects.update',
                 'destroy' => 'teacher.projects.delete',
             ]);
+        Route::get('projects/{project}/download', [TeacherProjectController::class, 'download'])->name('teacher.projects.download');
+        Route::put('projects/{project}/complete', [TeacherProjectController::class, 'complete'])->name('teacher.projects.complete');
 
         Route::resource('tasks', TeacherTaskController::class)
             ->except(['index', 'show', 'create', 'edit', 'update'])

@@ -25,6 +25,36 @@
                                     <div class="form-body">
                                         <div class="row">
 
+                                            <!-- Status -->
+                                            <div class="col-md-4">
+                                                <label for="item-project-status">PROJECT STATUS</label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <div class="controls">
+                                                    <input id="item-project-status"
+                                                           class="form-control"
+                                                           type="text"
+                                                           value="{{ $project->status }}"
+                                                           readonly>
+                                                </div>
+                                            </div>
+
+                                            <!-- Student -->
+                                            <div class="col-md-4">
+                                                <label for="item-student">STUDENT</label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <div class="controls">
+                                                    <input id="item-student"
+                                                           class="form-control"
+                                                           type="text"
+                                                           name="student"
+                                                           placeholder="student"
+                                                           value="{{ $project->student->full_name }}"
+                                                           readonly>
+                                                </div>
+                                            </div>
+
                                             <!-- Title -->
                                             <div class="col-md-4">
                                                 <label for="item-title">TITLE</label>
@@ -71,110 +101,114 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Student -->
-                                            <div class="col-md-4">
-                                                <label for="item-student">STUDENT</label>
-                                            </div>
-                                            <div class="col-md-8 form-group">
-                                                <div class="controls">
-                                                    <input id="item-student"
-                                                           class="form-control"
-                                                           type="text"
-                                                           name="student"
-                                                           placeholder="student"
-                                                           value="{{ $project->student->full_name }}"
-                                                           readonly>
+                                            @if($project->status === ProjectStatus::IN_REVIEW || $project->status === ProjectStatus::COMPLETED)
+                                                <div class="col-md-4">
+                                                    <label for="item-artefact">ARTEFACT</label>
                                                 </div>
-                                            </div>
+                                                <div class="col-md-8 form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-9 form-group">
+                                                            <input id="item-artefact"
+                                                                   class="form-control"
+                                                                   type="text"
+                                                                   value="{{ $project->artefact }}"
+                                                                   placeholder="artefact"
+                                                                   readonly>
+                                                        </div>
 
-                                            <!-- Status -->
-                                            <div class="col-md-4">
-                                                <label for="item-status">STATUS</label>
-                                            </div>
-                                            <div class="col-md-8 form-group">
-                                                <div class="controls">
-                                                    <input id="item-status"
-                                                           class="form-control"
-                                                           type="text"
-                                                           name="status"
-                                                           placeholder="status"
-                                                           value="{{ $project->status }}"
-                                                           readonly>
+                                                        <div class="col-md-3">
+                                                            <div class="d-flex justify-content-end">
+                                                                <a class="btn btn-primary shadow"
+                                                                   data-toggle="tooltip"
+                                                                   data-placement="top"
+                                                                   data-original-title="Download File"
+                                                                   href="{{ route('teacher.projects.download', $project) }}">
+                                                                    <i class="bx bx-download"></i>
+                                                                    Download
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endif
 
-                                            <!-- Buttons -->
                                             <div class="col-sm-12 d-flex justify-content-end">
-                                                <button id="item-delete" type="button" class="btn btn-danger shadow mr-1">
-                                                    <i class="bx bx-trash"></i>
-                                                    Delete
-                                                </button>
-                                                <button type="submit" class="btn btn-primary shadow">Update</button>
-                                            </div>
+                                                @if($project->status !== ProjectStatus::IN_REVIEW && $project->status !== ProjectStatus::COMPLETED)
+                                                    <button type="submit" class="btn btn-primary shadow">Update</button>
+                                                @endif
 
+                                                @if($project->status === ProjectStatus::IN_REVIEW)
+                                                    <button type="button" class="btn btn-primary shadow complete-project">Complete</button>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
 
-                                <form id="form-delete" action="{{ route('teacher.projects.delete', $project) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
+                                @if($project->status === ProjectStatus::IN_REVIEW)
+                                    <form id="form-complete" action="{{ route('teacher.projects.complete', $project) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                    </form>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Add New Task</h4>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-body">
-                                <form class="form form-horizontal" method="POST" action="{{ route('teacher.tasks.store') }}">
-                                    @csrf
-                                    <div class="form-body">
-                                        <div class="row">
-                                            <input type="hidden" name="project_id" value="{{ $project->id }}">
+            @if($project->status !== ProjectStatus::IN_REVIEW && $project->status !== ProjectStatus::COMPLETED)
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Add New Task</h4>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <form class="form form-horizontal" method="POST" action="{{ route('teacher.tasks.store') }}">
+                                        @csrf
+                                        <div class="form-body">
+                                            <div class="row">
+                                                <input type="hidden" name="project_id" value="{{ $project->id }}">
 
-                                            <!-- Description -->
-                                            <div class="col-md-4">
-                                                <label for="item-description">DESCRIPTION</label>
-                                                <small class="text-muted">required</small>
-                                            </div>
-                                            <div class="col-md-8 form-group">
-                                                <div class="controls">
+                                                <!-- Description -->
+                                                <div class="col-md-4">
+                                                    <label for="item-description">DESCRIPTION</label>
+                                                    <small class="text-muted">required</small>
+                                                </div>
+                                                <div class="col-md-8 form-group">
+                                                    <div class="controls">
                                                     <textarea id="item-description"
                                                               class="form-control @error('description') is-invalid @enderror"
                                                               type="text"
                                                               name="description"
                                                               placeholder="description"
                                                               required>{{ old('description') }}</textarea>
-                                                    @error('description')
-                                                    <div class="invalid-feedback">
-                                                        <i class="bx bx-radio-circle"></i>
-                                                        {{ $message }}
+                                                        @error('description')
+                                                        <div class="invalid-feedback">
+                                                            <i class="bx bx-radio-circle"></i>
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
                                                     </div>
-                                                    @enderror
                                                 </div>
-                                            </div>
 
-                                            <!-- Save -->
-                                            <div class="col-sm-12 d-flex justify-content-end">
-                                                <button type="submit" class="btn btn-primary shadow">Add</button>
-                                            </div>
+                                                <!-- Save -->
+                                                <div class="col-sm-12 d-flex justify-content-end">
+                                                    <button type="submit" class="btn btn-primary shadow">Add</button>
+                                                </div>
 
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             <div class="row">
                 <div class="col-12">
@@ -219,17 +253,19 @@
                                                         @endswitch
                                                     </td>
                                                     <td>
-                                                        <form action="{{ route('teacher.tasks.delete', $task) }}" method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form>
+                                                        @if($project->status !== ProjectStatus::IN_REVIEW && $project->status !== ProjectStatus::COMPLETED)
+                                                            <form action="{{ route('teacher.tasks.delete', $task) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            </form>
 
-                                                        <button class="btn btn-icon rounded-circle btn-danger shadow delete-task"
-                                                                data-toggle="tooltip"
-                                                                data-placement="top"
-                                                                data-original-title="Delete">
-                                                            <i class="bx bx-trash"></i>
-                                                        </button>
+                                                            <button class="btn btn-icon rounded-circle btn-danger shadow delete-task"
+                                                                    data-toggle="tooltip"
+                                                                    data-placement="top"
+                                                                    data-original-title="Delete">
+                                                                <i class="bx bx-trash"></i>
+                                                            </button>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -255,10 +291,12 @@
 @section('page-js')
     <script type="text/javascript">
         $(document).ready(function () {
-
             $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 
-            $('#item-delete').on('click', function () {
+            @if($project->status === ProjectStatus::IN_REVIEW)
+            $('.complete-project').on('click', function () {
+                let button = $(this);
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -266,17 +304,19 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Delete!',
-                    confirmButtonClass: 'btn btn-danger',
+                    confirmButtonText: 'Complete!',
+                    confirmButtonClass: 'btn btn-warning',
                     cancelButtonClass: 'btn btn-primary ml-1',
                     buttonsStyling: false,
                 }).then(function (result) {
                     if (result.value) {
-                        $('#form-delete').submit();
+                        $('#form-complete').submit();
                     }
                 })
             });
+            @endif
 
+            @if($project->status !== ProjectStatus::IN_REVIEW && $project->status !== ProjectStatus::COMPLETED)
             $('.delete-task').on('click', function () {
                 let button = $(this);
 
@@ -297,7 +337,7 @@
                     }
                 })
             });
-
+            @endif
         });
     </script>
 @endsection

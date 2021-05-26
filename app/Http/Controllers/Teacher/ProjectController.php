@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Teacher;
 
+use App\Helpers\ProjectStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProjectUpdate;
 use App\Models\Project;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -60,5 +62,17 @@ class ProjectController extends Controller
         }
 
         return redirect()->route('teacher.projects.index')->with(['toast-type' => 'success', 'message' => 'Project deleted!']);
+    }
+
+    public function download(Project $project)
+    {
+        return Storage::disk('public')->download($project->artefact);
+    }
+
+    public function complete(Project $project)
+    {
+        $project->update(['status' => ProjectStatus::COMPLETED]);
+
+        return back()->with(['toast-type' => 'success', 'message' => 'Project completed!']);
     }
 }
