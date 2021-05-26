@@ -14,7 +14,8 @@
                         </div>
                         <div class="card-content">
                             <div class="card-body">
-                                <form class="form form-horizontal" method="POST" action="{{ route('student.project.submit') }}">
+                                <form class="form form-horizontal" method="POST" action="{{ route('student.project.submit') }}" enctype="multipart/form-data">
+                                    @method('PUT')
                                     @csrf
                                     <div class="form-body">
                                         <div class="row">
@@ -95,7 +96,44 @@
                                                 </div>
                                             </div>
 
-                                            @if($user->studentProjectRequest === null)
+                                            <!-- Artefact -->
+                                            <div class="col-md-4">
+                                                <label for="item-artefact">ARTEFACT</label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <div class="row">
+                                                    <div class="col-md-{{ $user->studentProject->status === ProjectStatus::IN_REVIEW || $user->studentProject->status === ProjectStatus::COMPLETED ? '9' : '12' }} form-group">
+                                                        <input id="item-artefact"
+                                                               class="form-control  @error('artefact') is-invalid @enderror"
+                                                               type="file"
+                                                               name="artefact"
+                                                               placeholder="artefact"
+                                                               required>
+                                                        @error('artefact')
+                                                        <div class="invalid-feedback">
+                                                            <i class="bx bx-radio-circle"></i>
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+                                                    @if($user->studentProject->status === ProjectStatus::IN_REVIEW || $user->studentProject->status === ProjectStatus::COMPLETED)
+                                                        <div class="col-md-3">
+                                                            <div class="d-flex justify-content-end">
+                                                                <a class="btn btn-primary shadow"
+                                                                   data-toggle="tooltip"
+                                                                   data-placement="top"
+                                                                   data-original-title="Download File"
+                                                                   href="{{ route('student.project.download') }}">
+                                                                    <i class="bx bx-download"></i>
+                                                                    Download
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            @if($user->studentProjectRequest === null && $user->studentProject->status !== ProjectStatus::IN_REVIEW && $user->studentProject->status !== ProjectStatus::COMPLETED)
                                                 <div class="col-sm-12 d-flex justify-content-end">
                                                     <button type="submit" class="btn btn-primary shadow">Submit</button>
                                                 </div>

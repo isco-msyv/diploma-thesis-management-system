@@ -75,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::group(['middleware' => ['checkStudentHasProjectOrProjectRequest']], function () {
             Route::get('project', [ProjectController::class, 'show'])->name('student.project.show');
             Route::put('project', [ProjectController::class, 'submit'])->name('student.project.submit');
+            Route::get('project/download', [ProjectController::class, 'download'])->name('student.project.download');
             Route::put('tasks/{task}', [TaskController::class, 'complete'])->name('student.task.complete');
         });
     });
