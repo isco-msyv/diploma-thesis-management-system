@@ -17,7 +17,8 @@ class TopicController extends Controller
     public function index(Request $request)
     {
         $topics = Project::where('teacher_id', '=', auth()->user()->id)
-            ->where('student_id', '=', null)
+            ->doesntHave('request')
+            ->doesntHave('student')
             ->when($request->query('search'), function ($query) use ($request) {
                 $search = $request->query('search');
                 $query->where(function ($query) use ($search) {
@@ -46,7 +47,7 @@ class TopicController extends Controller
         $validated['teacher_id'] = auth()->user()->id;
 
         if (isset($validated['student_id'])){
-            $validated['status'] = ProjectStatus::ASSIGNED;
+            $validated['status'] = ProjectStatus::IN_PROGRESS;
         }
 
         $project = Project::create($validated);
@@ -81,7 +82,7 @@ class TopicController extends Controller
         $validated = $request->validated();
 
         if (isset($validated['student_id'])){
-            $validated['status'] = ProjectStatus::ASSIGNED;
+            $validated['status'] = ProjectStatus::IN_PROGRESS;
         }
 
         $topic->update($validated);

@@ -17,8 +17,7 @@ class ProjectRequest extends Model
      */
     protected $fillable = [
         'project_id',
-        'student_id',
-        'status',
+        'student_id'
     ];
 
     /**

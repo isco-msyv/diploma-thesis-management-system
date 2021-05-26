@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Project::class, 'student_id', 'id');
     }
+
+    public function studentProjectRequest(): HasOne
+    {
+        return $this->hasOne(ProjectRequest::class, 'student_id', 'id');
+    }
 }

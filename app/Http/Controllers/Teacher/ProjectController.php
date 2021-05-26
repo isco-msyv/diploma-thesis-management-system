@@ -12,7 +12,8 @@ class ProjectController extends Controller
 {
     public function index(Request $request)
     {
-        $projects = Project::with('student')->where('teacher_id', '=', auth()->user()->id)
+        $projects = Project::with('student')
+            ->where('teacher_id', '=', auth()->user()->id)
             ->has('student')
             ->when($request->query('search'), function ($query) use ($request) {
                 $search = $request->query('search');

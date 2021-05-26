@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Student\ProjectController;
+use App\Http\Controllers\Student\TaskController;
+use App\Http\Controllers\Student\TopicController;
 use App\Http\Controllers\Teacher\ProjectController as TeacherProjectController;
 use App\Http\Controllers\Teacher\ProjectRequestController as TeacherProjectRequestController;
 use App\Http\Controllers\Teacher\TaskController as TeacherTaskController;
@@ -62,4 +65,17 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/project-requests/{projectRequest}', [TeacherProjectRequestController::class, 'update'])->name('teacher.projectRequests.update');
     });
 
+    Route::group(['prefix' => 'student', 'middleware' => ['checkUserTypeStudent']], function () {
+        Route::group(['middleware' => ['checkStudentHasNoProjectOrProjectRequest']], function () {
+            Route::get('topics', [TopicController::class, 'index'])->name('student.topics.index');
+            Route::get('topics/{topic}', [TopicController::class, 'show'])->name('student.topics.show');
+            Route::post('topics/{topic}', [TopicController::class, 'apply'])->name('student.topics.apply');
+        });
+
+        Route::group(['middleware' => ['checkStudentHasProjectOrProjectRequest']], function () {
+            Route::get('project', [ProjectController::class, 'show'])->name('student.project.show');
+            Route::put('project', [ProjectController::class, 'submit'])->name('student.project.submit');
+            Route::put('tasks/{task}', [TaskController::class, 'complete'])->name('student.task.complete');
+        });
+    });
 });

@@ -130,6 +130,26 @@
                     </a>
                 </li>
             @endif
+
+            @if(auth()->user()->type === UserType::STUDENT)
+                @if(auth()->user()->studentProject === null && auth()->user()->studentProjectRequest === null)
+                    <li class="{{ (Route::is('student.topics.index') || Route::is('student.topics.show')) ? 'active' : null }} nav-item">
+                        <a href="{{ route('student.topics.index') }}">
+                            <i class="menu-livicon livicon-evo-holder" data-icon="notebook"></i>
+                            <span class="menu-title">Topics</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if(auth()->user()->studentProject !== null || auth()->user()->studentProjectRequest !== null)
+                    <li class="{{ (Route::is('student.project.show')) ? 'active' : null }} nav-item">
+                        <a href="{{ route('student.project.show') }}">
+                            <i class="menu-livicon livicon-evo-holder" data-icon="notebook"></i>
+                            <span class="menu-title">Project</span>
+                        </a>
+                    </li>
+                @endif
+            @endif
         </ul>
     </div>
 </div>

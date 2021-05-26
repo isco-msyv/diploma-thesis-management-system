@@ -21,7 +21,6 @@
                                                 <th>ID</th>
                                                 <th>PROJECT</th>
                                                 <th>STUDENT</th>
-                                                <th>STATUS</th>
                                                 <th>ACTION</th>
                                             </tr>
                                             </thead>
@@ -32,40 +31,21 @@
                                                     <td>{{ $projectRequest->project->title }}</td>
                                                     <td>{{ $projectRequest->student->full_name }}</td>
                                                     <td>
-                                                        @switch($projectRequest->status)
-                                                            @case(ProjectRequestStatus::PENDING)
-                                                            <span class="badge badge-warning">
-                                                                {{ $projectRequest->status }}
-                                                            </span>
-                                                            @break
-
-                                                            @case(ProjectRequestStatus::ACCEPTED)
-                                                            <span class="badge badge-success">
-                                                                {{ $projectRequest->status }}
-                                                            </span>
-                                                            @break
-
-                                                            @case(ProjectRequestStatus::REJECTED)
-                                                            <span class="badge badge-danger">
-                                                                {{ $projectRequest->status }}
-                                                            </span>
-                                                            @break
-
-                                                            @default
-                                                            Error
-                                                        @endswitch
-                                                    </td>
-                                                    <td>
-                                                        <form action="{{ route('teacher.projectRequests.update', $projectRequest) }}" method="POST">
+                                                        <form class="d-inline" action="{{ route('teacher.projectRequests.update', $projectRequest) }}" method="POST">
                                                             @csrf
                                                             @method('PUT')
-                                                            <select name="status">
-                                                                @foreach(ProjectRequestStatus::all() as $status)
-                                                                    <option value="{{ $status }}" @if($projectRequest->status === $status) selected @endif>{{ $status }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            <button class="btn btn-secondary shadow ml-3">
-                                                                Update
+                                                            <input type="hidden" name="status" value="0">
+                                                            <button class="btn btn-danger shadow">
+                                                                Reject
+                                                            </button>
+                                                        </form>
+
+                                                        <form class="d-inline" action="{{ route('teacher.projectRequests.update', $projectRequest) }}" method="POST">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="status" value="1">
+                                                            <button class="btn btn-success shadow ml-3">
+                                                                Accept
                                                             </button>
                                                         </form>
                                                     </td>

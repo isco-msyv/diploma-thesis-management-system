@@ -5,14 +5,14 @@ namespace App\Helpers;
 abstract class ProjectStatus
 {
     const NOT_ASSIGNED = 'Not Assigned';
-    const ASSIGNED = 'Assigned';
-    const SUBMITTED = 'Submitted';
+    const IN_PROGRESS = 'In Progress';
+    const IN_REVIEW = 'In Review';
     const COMPLETED = 'Completed';
 
     private static array $all = [
         self::NOT_ASSIGNED,
-        self::ASSIGNED,
-        self::SUBMITTED,
+        self::IN_PROGRESS,
+        self::IN_REVIEW,
         self::COMPLETED,
     ];
 
