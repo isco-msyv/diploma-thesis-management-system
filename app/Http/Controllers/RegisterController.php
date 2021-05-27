@@ -34,7 +34,7 @@ class RegisterController extends Controller
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'type' => ['required', Rule::in(UserType::all())],
+            'type' => ['required', Rule::in([UserType::TEACHER, UserType::STUDENT])],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 

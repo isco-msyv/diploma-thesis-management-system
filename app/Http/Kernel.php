@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\CheckStudentHasNoProjectOrProjectRequest;
 use App\Http\Middleware\CheckStudentHasProjectOrProjectRequest;
+use App\Http\Middleware\CheckUserTypeAdmin;
 use App\Http\Middleware\CheckUserTypeStudent;
 use App\Http\Middleware\CheckUserTypeTeacher;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -69,6 +70,7 @@ class Kernel extends HttpKernel
 
         'checkUserTypeStudent'=> CheckUserTypeStudent::class,
         'checkUserTypeTeacher'=> CheckUserTypeTeacher::class,
+        'checkUserTypeAdmin'=> CheckUserTypeAdmin::class,
         'checkStudentHasNoProjectOrProjectRequest'=> CheckStudentHasNoProjectOrProjectRequest::class,
         'checkStudentHasProjectOrProjectRequest'=> CheckStudentHasProjectOrProjectRequest::class,
     ];

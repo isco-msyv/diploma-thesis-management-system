@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
@@ -36,6 +37,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::group(['prefix' => 'admin', 'middleware' => ['checkUserTypeAdmin']], function () {
+        Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
+        Route::get('users/{user}', [UserController::class, 'edit'])->name('admin.users.edit');
+        Route::put('users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+        Route::delete('users/{user}', [UserController::class, 'destroy'])->name('admin.users.delete');
+    });
 
     Route::group(['prefix' => 'teacher', 'middleware' => ['checkUserTypeTeacher']], function () {
         Route::resource('topics', TeacherTopicController::class)

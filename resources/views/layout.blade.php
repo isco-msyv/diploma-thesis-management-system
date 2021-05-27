@@ -108,17 +108,26 @@
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="lines">
+            @if(auth()->user()->type === UserType::ADMIN)
+                <li class="{{ (Route::is('admin.users.index') || Route::is('admin.users.edit')) ? 'active' : null }} nav-item">
+                    <a href="{{ route('admin.users.index') }}">
+                        <i class="menu-livicon livicon-evo-holder" data-icon="users"></i>
+                        <span class="menu-title">Users</span>
+                    </a>
+                </li>
+            @endif
+
             @if(auth()->user()->type === UserType::TEACHER)
                 <li class="{{ (Route::is('teacher.topics.index') || Route::is('teacher.topics.create') || Route::is('teacher.topics.edit')) ? 'active' : null }} nav-item">
                     <a href="{{ route('teacher.topics.index') }}">
-                        <i class="menu-livicon livicon-evo-holder" data-icon="notebook"></i>
+                        <i class="menu-livicon livicon-evo-holder" data-icon="lab"></i>
                         <span class="menu-title">Topics</span>
                     </a>
                 </li>
 
                 <li class="{{ (Route::is('teacher.projectRequests.index')) ? 'active' : null }} nav-item">
                     <a href="{{ route('teacher.projectRequests.index') }}">
-                        <i class="menu-livicon livicon-evo-holder" data-icon="notebook"></i>
+                        <i class="menu-livicon livicon-evo-holder" data-icon="info-alt"></i>
                         <span class="menu-title">Project Requests</span>
                     </a>
                 </li>
@@ -135,7 +144,7 @@
                 @if(auth()->user()->studentProject === null && auth()->user()->studentProjectRequest === null)
                     <li class="{{ (Route::is('student.topics.index') || Route::is('student.topics.show')) ? 'active' : null }} nav-item">
                         <a href="{{ route('student.topics.index') }}">
-                            <i class="menu-livicon livicon-evo-holder" data-icon="notebook"></i>
+                            <i class="menu-livicon livicon-evo-holder" data-icon="lab"></i>
                             <span class="menu-title">Topics</span>
                         </a>
                     </li>
@@ -144,7 +153,7 @@
                 @if(auth()->user()->studentProject !== null || auth()->user()->studentProjectRequest !== null)
                     <li class="{{ (Route::is('student.project.show')) ? 'active' : null }} nav-item">
                         <a href="{{ route('student.project.show') }}">
-                            <i class="menu-livicon livicon-evo-holder" data-icon="notebook"></i>
+                            <i class="menu-livicon livicon-evo-holder" data-icon="hourglass"></i>
                             <span class="menu-title">Project</span>
                         </a>
                     </li>
