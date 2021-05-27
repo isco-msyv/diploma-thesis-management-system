@@ -33,6 +33,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function scopeVerified($query)
+    {
+        return $query->where('is_verified', '=', true);
+    }
+
     public function studentProject(): HasOne
     {
         return $this->hasOne(Project::class, 'student_id', 'id');

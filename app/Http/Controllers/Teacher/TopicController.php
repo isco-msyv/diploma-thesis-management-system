@@ -33,7 +33,7 @@ class TopicController extends Controller
 
     public function create()
     {
-        $students = User::where('type', '=', UserType::STUDENT)->doesntHave('studentProject')->get();
+        $students = User::where('type', '=', UserType::STUDENT)->doesntHave('studentProject')->verified()->get();
 
         return view('teacher.topics.create', [
             'students' => $students
@@ -46,7 +46,7 @@ class TopicController extends Controller
 
         $validated['teacher_id'] = auth()->user()->id;
 
-        if (isset($validated['student_id'])){
+        if (isset($validated['student_id'])) {
             $validated['status'] = ProjectStatus::IN_PROGRESS;
         }
 
@@ -67,7 +67,7 @@ class TopicController extends Controller
             return redirect()->route('teacher.topics.index');
         }
 
-        $students = User::where('type', '=', UserType::STUDENT)->doesntHave('studentProject')->get();
+        $students = User::where('type', '=', UserType::STUDENT)->doesntHave('studentProject')->verified()->get();
 
         return view('teacher.topics.edit', [
             'topic' => $topic,
@@ -81,7 +81,7 @@ class TopicController extends Controller
 
         $validated = $request->validated();
 
-        if (isset($validated['student_id'])){
+        if (isset($validated['student_id'])) {
             $validated['status'] = ProjectStatus::IN_PROGRESS;
         }
 
