@@ -23,6 +23,7 @@ class TeacherSeeder extends Seeder
                     'email' => 'john@teacher.com',
                     'password' => bcrypt('secret'),
                     'type' => UserType::TEACHER,
+                    'is_verified' => true,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
                 ],
@@ -31,6 +32,7 @@ class TeacherSeeder extends Seeder
                     'email' => 'jane@teacher.com',
                     'password' => bcrypt('secret'),
                     'type' => UserType::TEACHER,
+                    'is_verified' => true,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
                 ]

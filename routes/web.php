@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Student\ProjectController;
 use App\Http\Controllers\Student\TaskController;
 use App\Http\Controllers\Student\TopicController;
@@ -25,6 +26,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');
     Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+    Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
+    Route::post('/register', [RegisterController::class, 'register'])->name('register');
 });
 
 Route::middleware(['auth'])->group(function () {

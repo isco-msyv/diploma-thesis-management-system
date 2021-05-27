@@ -50,7 +50,7 @@ class ProjectController extends Controller
         $fullName = Str::slug($item->getClientOriginalName());
         $extension = $item->getClientOriginalExtension();
         $fileName = pathinfo($fullName, PATHINFO_FILENAME) . '-' . Str::uuid()->getHex() . '.' . $extension;
-        $item = Storage::disk('public')->putFileAs('atefacts', $item, $fileName);
+        $item = Storage::disk('public')->putFileAs('artefacts', $item, $fileName);
 
         auth()->user()->studentProject->update(['artefact' => $item, 'status' => ProjectStatus::IN_REVIEW]);
 

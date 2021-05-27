@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class LoginController extends Controller
 {
@@ -59,7 +60,9 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            $this->username() => ['required', 'string'],
+            $this->username() => ['required', 'string', Rule::exists('users')->where(function ($query) {
+                $query->where('is_verified', '=', true);
+            })],
             'password' => ['required', 'string']
         ]);
     }
