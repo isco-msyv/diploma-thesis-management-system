@@ -29,7 +29,16 @@ class ProjectController extends Controller
             $project = $user->studentProjectRequest->project;
         }
 
-        return view('student.project.show', ['project' => $project, 'user' => $user]);
+        $completed = 0;
+        foreach ($project->tasks as $task) {
+            if ($task->status) {
+                $completed++;
+            }
+        }
+
+        $progress = intval($completed * 100 / $project->tasks->count());
+
+        return view('student.project.show', ['project' => $project, 'user' => $user, 'progress' => $progress]);
     }
 
     public function submit(Request $request)

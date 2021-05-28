@@ -36,6 +36,18 @@
                                             @endif
 
                                             @if($user->studentProjectRequest === null)
+                                                <div class="col-md-12">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>0%</span>
+                                                        <span>100%</span>
+                                                    </div>
+                                                    <div class="progress progress-bar-primary mb-2 align-items-center">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow=" {{ $progress }}" aria-valuemin=" {{ $progress }}" aria-valuemax="100" style="width: {{ $progress }}%">
+                                                            <span>Tasks Completed {{ $progress }}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div class="col-md-4">
                                                     <label for="item-project-status">PROJECT STATUS</label>
                                                 </div>

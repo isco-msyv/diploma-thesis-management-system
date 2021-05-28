@@ -37,7 +37,16 @@ class ProjectController extends Controller
 
         $project->load(['tasks', 'student']);
 
-        return view('teacher.projects.edit', ['project' => $project]);
+        $completed = 0;
+        foreach ($project->tasks as $task) {
+            if ($task->status) {
+                $completed++;
+            }
+        }
+
+        $progress = intval($completed * 100 / $project->tasks->count());
+
+        return view('teacher.projects.edit', ['project' => $project, 'progress' => $progress]);
     }
 
     public function update(ProjectUpdate $request, Project $project)
