@@ -44,7 +44,7 @@ class ProjectController extends Controller
             }
         }
 
-        $progress = intval($completed * 100 / $project->tasks->count());
+        $progress = $completed === 0 ? 0 : intval($completed * 100 / $project->tasks->count());
 
         return view('teacher.projects.edit', ['project' => $project, 'progress' => $progress]);
     }
