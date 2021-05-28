@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Helpers\UserType;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
