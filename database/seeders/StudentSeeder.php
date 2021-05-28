@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Helpers\UserType;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -38,5 +39,7 @@ class StudentSeeder extends Seeder
                 ]
             ]
         );
+
+//        User::factory()->count(5)->create(['type' => UserType::STUDENT]);
     }
 }
