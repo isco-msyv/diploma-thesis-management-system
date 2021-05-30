@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ProjectRequestSent;
 use App\Models\Project;
 use App\Models\ProjectRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class TopicController extends Controller
 {
@@ -37,12 +39,14 @@ class TopicController extends Controller
 
     public function apply($id)
     {
-        $topic = Project::doesntHave('request')->doesntHave('student')->findOrFail($id);
+        $topic = Project::with(['teacher'])->doesntHave('request')->doesntHave('student')->findOrFail($id);
 
         ProjectRequest::create([
             'project_id' => $topic->id,
             'student_id' => auth()->user()->id
         ]);
+
+        Mail::to($topic->teacher->email)->send(new ProjectRequestSent($topic));
 
         return redirect()->route('student.project.show')->with(['toast-type' => 'success', 'message' => 'Project request sent!']);
     }

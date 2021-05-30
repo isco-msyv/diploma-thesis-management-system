@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Teacher;
 use App\Helpers\ProjectStatus;
 use App\Helpers\UserType;
 use App\Http\Controllers\Controller;
+use App\Mail\ProjectRequestAccepted;
+use App\Mail\ProjectRequestRejected;
 use App\Models\ProjectRequest;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class ProjectRequestController extends Controller
@@ -30,7 +33,7 @@ class ProjectRequestController extends Controller
 
     public function update(Request $request, ProjectRequest $projectRequest)
     {
-        $projectRequest->load(['project']);
+        $projectRequest->load(['project', 'student']);
 
         if ($projectRequest->project->teacher_id !== auth()->user()->id) {
             return redirect()->route('profile.edit');
@@ -47,6 +50,11 @@ class ProjectRequestController extends Controller
         if ($status) {
             $message = "Project Request accepted";
             $projectRequest->project()->update(['student_id' => $projectRequest->student_id, 'status' => ProjectStatus::IN_PROGRESS]);
+
+            Mail::to($projectRequest->student->email)->send(new ProjectRequestAccepted());
+
+        } else {
+            Mail::to($projectRequest->student->email)->send(new ProjectRequestRejected());
         }
 
         $projectRequest->delete();
