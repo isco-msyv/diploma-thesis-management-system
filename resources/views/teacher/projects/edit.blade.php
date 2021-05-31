@@ -151,6 +151,7 @@
                                                 @endif
 
                                                 @if($project->status === ProjectStatus::IN_REVIEW)
+                                                    <button type="button" class="btn btn-warning shadow reject-project mr-3">Reject</button>
                                                     <button type="button" class="btn btn-primary shadow complete-project">Complete</button>
                                                 @endif
                                             </div>
@@ -160,6 +161,11 @@
 
                                 @if($project->status === ProjectStatus::IN_REVIEW)
                                     <form id="form-complete" action="{{ route('teacher.projects.complete', $project) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                    </form>
+
+                                    <form id="form-reject" action="{{ route('teacher.projects.reject', $project) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                     </form>
@@ -307,11 +313,8 @@
 
             @if($project->status === ProjectStatus::IN_REVIEW)
             $('.complete-project').on('click', function () {
-                let button = $(this);
-
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
+                    title: 'Complete this project?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -323,6 +326,24 @@
                 }).then(function (result) {
                     if (result.value) {
                         $('#form-complete').submit();
+                    }
+                })
+            });
+
+            $('.reject-project').on('click', function () {
+                Swal.fire({
+                    title: 'Reject this project?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Reject!',
+                    confirmButtonClass: 'btn btn-warning',
+                    cancelButtonClass: 'btn btn-primary ml-1',
+                    buttonsStyling: false,
+                }).then(function (result) {
+                    if (result.value) {
+                        $('#form-reject').submit();
                     }
                 })
             });

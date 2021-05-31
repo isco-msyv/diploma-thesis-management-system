@@ -67,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
             ]);
         Route::get('projects/{project}/download', [TeacherProjectController::class, 'download'])->name('teacher.projects.download');
         Route::put('projects/{project}/complete', [TeacherProjectController::class, 'complete'])->name('teacher.projects.complete');
+        Route::put('projects/{project}/reject', [TeacherProjectController::class, 'reject'])->name('teacher.projects.reject');
 
         Route::resource('tasks', TeacherTaskController::class)
             ->except(['index', 'show', 'create', 'edit', 'update'])

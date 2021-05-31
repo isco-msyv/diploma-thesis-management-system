@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Student;
 
 use App\Helpers\ProjectStatus;
 use App\Http\Controllers\Controller;
+use App\Mail\ProjectSubmitted;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -62,6 +64,8 @@ class ProjectController extends Controller
         $item = Storage::disk('public')->putFileAs('artefacts', $item, $fileName);
 
         auth()->user()->studentProject->update(['artefact' => $item, 'status' => ProjectStatus::IN_REVIEW]);
+
+        Mail::to(auth()->user()->studentProject->teacher->email)->send(new ProjectSubmitted(auth()->user()->studentProject));
 
         return back()->with(['toast-type' => 'success', 'message' => 'Project submitted!']);
     }
