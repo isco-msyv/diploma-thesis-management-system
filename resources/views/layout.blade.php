@@ -38,7 +38,7 @@
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
-<body class="vertical-layout vertical-menu-modern light-layout 2-columns navbar-sticky footer-static"
+<body class="vertical-layout vertical-menu-modern light-layout 2-columns navbar-sticky footer-static {{ (Route::is('teacher.conversations.index') || Route::is('teacher.conversations.edit') || Route::is('student.conversation.edit')) ? 'chat-application' : null }}"
       data-open="click"
       data-menu="vertical-menu-modern"
       data-col="2-columns"
@@ -138,6 +138,13 @@
                         <span class="menu-title">Projects</span>
                     </a>
                 </li>
+
+                <li class="{{ (Route::is('teacher.conversations.index') || Route::is('teacher.conversations.edit')) ? 'active' : null }} nav-item">
+                    <a href="{{ route('teacher.conversations.index') }}">
+                        <i class="menu-livicon livicon-evo-holder" data-icon="comment"></i>
+                        <span class="menu-title">Conversations</span>
+                    </a>
+                </li>
             @endif
 
             @if(auth()->user()->type === UserType::STUDENT)
@@ -155,6 +162,13 @@
                         <a href="{{ route('student.project.show') }}">
                             <i class="menu-livicon livicon-evo-holder" data-icon="hourglass"></i>
                             <span class="menu-title">Project</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ Route::is('student.conversation.edit') ? 'active' : null }} nav-item">
+                        <a href="{{ route('student.conversation.edit') }}">
+                            <i class="menu-livicon livicon-evo-holder" data-icon="comment"></i>
+                            <span class="menu-title">Conversation</span>
                         </a>
                     </li>
                 @endif

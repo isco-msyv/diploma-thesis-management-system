@@ -40,3 +40,8 @@ body.dark-layout .table tbody td a i, body.dark-layout .table tbody th a i {
 body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation li.has-sub > a:not(.mm-next):after {
     content: '\ea48';
 }
+
+
+.chat-left .chat-time {
+    left: 0 !important;
+}

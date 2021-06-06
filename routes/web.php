@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Student\ConversationController;
 use App\Http\Controllers\Student\ProjectController;
 use App\Http\Controllers\Student\TaskController;
 use App\Http\Controllers\Student\TopicController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Teacher\ProjectController as TeacherProjectController;
 use App\Http\Controllers\Teacher\ProjectRequestController as TeacherProjectRequestController;
 use App\Http\Controllers\Teacher\TaskController as TeacherTaskController;
 use App\Http\Controllers\Teacher\TopicController as TeacherTopicController;
+use App\Http\Controllers\Teacher\ConversationController as TeacherConversationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -78,6 +80,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/project-requests', [TeacherProjectRequestController::class, 'index'])->name('teacher.projectRequests.index');
         Route::put('/project-requests/{projectRequest}', [TeacherProjectRequestController::class, 'update'])->name('teacher.projectRequests.update');
+
+        Route::get('conversations', [TeacherConversationController::class, 'index'])->name('teacher.conversations.index');
+        Route::get('conversations/{conversation}', [TeacherConversationController::class, 'edit'])->name('teacher.conversations.edit');
+        Route::put('conversations/{conversation}', [TeacherConversationController::class, 'update'])->name('teacher.conversations.update');
     });
 
     Route::group(['prefix' => 'student', 'middleware' => ['checkUserTypeStudent']], function () {
@@ -92,6 +98,9 @@ Route::middleware(['auth'])->group(function () {
             Route::put('project', [ProjectController::class, 'submit'])->name('student.project.submit');
             Route::get('project/download', [ProjectController::class, 'download'])->name('student.project.download');
             Route::put('tasks/{task}', [TaskController::class, 'complete'])->name('student.task.complete');
+
+            Route::get('conversation', [ConversationController::class, 'edit'])->name('student.conversation.edit');
+            Route::put('conversation', [ConversationController::class, 'update'])->name('student.conversation.update');
         });
     });
 });

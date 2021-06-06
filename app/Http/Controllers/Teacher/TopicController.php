@@ -7,6 +7,7 @@ use App\Helpers\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicStore;
 use App\Http\Requests\TopicUpdate;
+use App\Models\Conversation;
 use App\Models\Project;
 use App\Models\User;
 use Exception;
@@ -48,6 +49,11 @@ class TopicController extends Controller
 
         if (isset($validated['student_id'])) {
             $validated['status'] = ProjectStatus::IN_PROGRESS;
+
+            Conversation::create([
+                'student_id' => $validated['student_id'],
+                'teacher_id' => auth()->user()->id
+            ]);
         }
 
         $project = Project::create($validated);
@@ -83,6 +89,11 @@ class TopicController extends Controller
 
         if (isset($validated['student_id'])) {
             $validated['status'] = ProjectStatus::IN_PROGRESS;
+
+            Conversation::create([
+                'student_id' => $validated['student_id'],
+                'teacher_id' => auth()->user()->id
+            ]);
         }
 
         $topic->update($validated);

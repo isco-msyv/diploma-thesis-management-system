@@ -7,6 +7,7 @@ use App\Helpers\UserType;
 use App\Http\Controllers\Controller;
 use App\Mail\ProjectRequestAccepted;
 use App\Mail\ProjectRequestRejected;
+use App\Models\Conversation;
 use App\Models\ProjectRequest;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,6 +51,11 @@ class ProjectRequestController extends Controller
         if ($status) {
             $message = "Project Request accepted";
             $projectRequest->project()->update(['student_id' => $projectRequest->student_id, 'status' => ProjectStatus::IN_PROGRESS]);
+
+            Conversation::create([
+                'student_id' => $projectRequest->student_id,
+                'teacher_id' => auth()->user()->id
+            ]);
 
             Mail::to($projectRequest->student->email)->send(new ProjectRequestAccepted());
 
