@@ -2,6 +2,14 @@
 
 @section('title', 'Project | Show')
 
+@if($user->studentProjectRequest !== null)
+
+@section('page-css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('frest/app-assets/vendors/css/extensions/sweetalert2.min.css') }}">
+@endsection
+
+@endif
+
 @section('content')
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -151,9 +159,21 @@
                                                 </div>
                                             @endif
 
+                                            @if($user->studentProjectRequest !== null)
+                                                <div class="col-sm-12 d-flex justify-content-end">
+                                                    <button id="item-cancel-request" type="button" class="btn btn-danger shadow">Cancel request</button>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </form>
+
+                                @if($user->studentProjectRequest !== null)
+                                    <form id="form-cancel-request" action="{{ route('student.project.cancel') }}" method="POST">
+                                        @csrf
+                                    </form>
+                                @endif
+
                             </div>
                         </div>
                     </div>
@@ -236,3 +256,38 @@
         </div>
     </div>
 @endsection
+
+@if($user->studentProjectRequest !== null)
+
+@section('page-vendor-js')
+    <script type="text/javascript" src="{{ asset('frest/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('frest/app-assets/vendors/js/extensions/polyfill.min.js') }}"></script>
+@endsection
+
+@section('page-js')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#item-cancel-request').on('click', function () {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Cancel request',
+                    cancelButtonText: 'Don\'t cancel!',
+                    confirmButtonClass: 'btn btn-danger',
+                    cancelButtonClass: 'btn btn-primary ml-1',
+                    buttonsStyling: false,
+                }).then(function (result) {
+                    if (result.value) {
+                        $('#form-cancel-request').submit();
+                    }
+                })
+            });
+        });
+    </script>
+@endsection
+
+@endif

@@ -43,6 +43,21 @@ class ProjectController extends Controller
         return view('student.project.show', ['project' => $project, 'user' => $user, 'progress' => $progress]);
     }
 
+    public function cancel()
+    {
+        $user = auth()->user()->load([
+            'studentProjectRequest',
+        ]);
+
+        if ($user->studentProjectRequest === null) {
+            return redirect()->route('student.project.show');
+        }
+
+        $user->studentProjectRequest->delete();
+
+        return redirect()->route('student.topics.index')->with(['toast-type' => 'success', 'message' => 'Request cancelled!']);
+    }
+
     public function submit(Request $request)
     {
         $tasks = auth()->user()->studentProject->tasks;
