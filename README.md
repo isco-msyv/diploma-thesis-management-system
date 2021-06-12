@@ -11,8 +11,15 @@ Installation steps:
 - Inside project run: php artisan migrate --seed
 - Inside project run: php artisan serve
   
-Run tests
+Run tests:
+
 - Inside project run: php artisan test
+
+Notes:
+- Email for admin user: lorem@admin.com
+- Password for admin user: password
+- Password for all default teacher and student users: password
+
 
 
 
