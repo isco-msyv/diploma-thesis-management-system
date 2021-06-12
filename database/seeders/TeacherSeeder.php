@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Helpers\UserType;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,7 @@ class TeacherSeeder extends Seeder
                 [
                     'full_name' => 'John Doe',
                     'email' => 'john@teacher.com',
-                    'password' => bcrypt('secret'),
+                    'password' => bcrypt('password'),
                     'type' => UserType::TEACHER,
                     'is_verified' => true,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -30,7 +31,7 @@ class TeacherSeeder extends Seeder
                 [
                     'full_name' => 'Jane Doe',
                     'email' => 'jane@teacher.com',
-                    'password' => bcrypt('secret'),
+                    'password' => bcrypt('password'),
                     'type' => UserType::TEACHER,
                     'is_verified' => true,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -39,6 +40,14 @@ class TeacherSeeder extends Seeder
             ]
         );
 
-//        User::factory()->count(5)->create(['type' => UserType::TEACHER]);
+        User::factory()->count(10)->create([
+            'type' => UserType::TEACHER,
+            'is_verified' => true,
+        ]);
+
+        User::factory()->count(5)->create([
+            'type' => UserType::TEACHER,
+            'is_verified' => false,
+        ]);
     }
 }

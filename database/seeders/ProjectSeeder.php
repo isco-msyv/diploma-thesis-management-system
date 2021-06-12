@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Helpers\ProjectStatus;
 use App\Helpers\UserType;
+use App\Models\Conversation;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
@@ -18,7 +19,19 @@ class ProjectSeeder extends Seeder
      */
     public function run()
     {
-        Project::factory()->count(1)->has(Task::factory()->count(rand(5, 10)))->create(['student_id'=> 4, 'status' => ProjectStatus::IN_PROGRESS]);
+        $teacher = User::where('type', '=', UserType::TEACHER)->where('email', '=', 'john@teacher.com')->verified()->first();
+        $student = User::where('type', '=', UserType::STUDENT)->where('email', '=', 'bob@student.com')->verified()->first();
+
+        Project::factory()->count(1)->has(Task::factory()->count(rand(5, 10)))->create([
+            'teacher_id' => $teacher->id,
+            'student_id' => $student->id,
+            'status' => ProjectStatus::IN_PROGRESS
+        ]);
+
+        Conversation::create([
+            'teacher_id' => $teacher->id,
+            'student_id' => $student->id,
+        ]);
 
         Project::factory()->count(5)->has(Task::factory()->count(rand(5, 10)))->create();
 

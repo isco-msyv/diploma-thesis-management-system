@@ -21,7 +21,7 @@ class AdminSeeder extends Seeder
                 [
                     'full_name' => 'Lorem Ipsum',
                     'email' => 'lorem@admin.com',
-                    'password' => bcrypt('secret'),
+                    'password' => bcrypt('password'),
                     'type' => UserType::ADMIN,
                     'is_verified' => true,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
